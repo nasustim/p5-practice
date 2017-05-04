@@ -1,38 +1,75 @@
-//一軸傾き 3D表示
-
 MonoStick mono;
+PImage mon;
+PImage shot;
+PImage shot_e;
+PImage hit;
+int sx=0,sy=0;
+final int h = 10;
+int flag=0;
+float x = 0,y = 0;
 
 void setup()
 {
-    size(640, 480);
-    frameRate(60);
-    background(255);
-    mono = new MonoStick(this);
-    mono.debugMode = true;
-    
-    for(int i=10;i>=0;i++){
-      fill(0);
-      textSize(36);
-      text(str(i)+"秒前",100,100);
-      delay(1000);
-      background(255);
-    }
+  size(640, 480);
+  width = 640;
+  height = 480;
+  frameRate(60);
+  background(255);
+  mono = new MonoStick(this);
+  mono.debugMode = true;
+  
+  mon = loadImage("monster.png");
+  shot = loadImage("shot.png");
+  shot_e = loadImage("shot_e.png");
+  hit = loadImage("hit.png");
+
+  /*for(int i=10;i>=0;i++){
+   background(255);
+   fill(0);
+   textSize(36);
+   text(str(i)+"秒前",100,100);
+   delay(1000);
+   }*/
 }
 
 void draw()
 {
-    background(255);
-    
-    mono.update();
+  background(255);
 
-    //Twelite twe = mono.getTwelite("10f249c");
-    Twelite twe = mono.getTwelite("10f2448");
-    if (twe == null)
-    {
-        return;
+  mono.update();
+
+  Twelite twe = mono.getTwelite("10f2448");
+  if (twe == null)
+  {
+    return;
+  }
+  
+  if(flag == 0){
+    x = random(440);
+    y = random(280);
+    image(mon,x,y,200,200);
+    flag++;
+  }else if(flag == 1){
+    image(mon,x,y,200,200);
+  }else if(flag == 2){
+    if((-0<((sx+(width/2))-x))&&(((sx+(width/2))-x)<200)&&
+        (-0<((sy+(height/2))-y))&&(((sy+(height/2))-y)<200)){
+      image(hit,x,y,200,200);
+      flag = 0;
+    }else{    
+      image(mon,x,y,200,200);
     }
-    
-    int spd = twe.getSpeed();
-    
-    
+  }
+  
+  sx = sx+(twe.getDegreeX()/h);
+  sy = sy+(twe.getDegreeY()/h);
+  
+  sx = (sx<width/-2)?width/-2:((sx>width/2-100)?width/2-100:sx);
+  sy = (sy<height/-2)?height/-2:((sy>height/2-100)?height/2-100:sy);
+  if(100>twe.getSpeed()){
+    image(shot,sx+((width/2)),sy+((height/2)));
+  }else{
+    image(shot_e,sx+((width/2)),sy+((height/2)));
+    flag = 2;
+  }
 }
