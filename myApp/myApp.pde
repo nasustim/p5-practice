@@ -23,13 +23,6 @@ void setup()
   shot_e = loadImage("shot_e.png");
   hit = loadImage("hit.png");
 
-  /*for(int i=10;i>=0;i++){
-   background(255);
-   fill(0);
-   textSize(36);
-   text(str(i)+"秒前",100,100);
-   delay(1000);
-   }*/
 }
 
 void draw()
